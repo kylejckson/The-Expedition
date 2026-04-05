@@ -688,8 +688,8 @@ function renderExpedition() {
       <select id="leader-select">${playerOptions}</select>
       <label for="scout-select">Scout</label>
       <select id="scout-select">${scoutOptions}</select>
-      <p style="font-size:0.85rem">The Leader and Scout must be different people. Discuss and vote IRL.</p>
-      <button class="btn-primary" id="proceed-btn">✅ We Voted IRL. Proceed to Path Selection</button>
+      <p style="font-size:0.85rem">The Leader and Scout must be different people. Discuss and vote in person, then proceed.</p>
+      <button class="btn-primary" id="proceed-btn">✅ Voted in Person. Proceed to Path Selection</button>
     </div>
   `;
 }
@@ -825,8 +825,8 @@ function bindScoutPlay() {
 
     gs.scoutCards = [];
 
-    // Reshuffle discard into deck if fewer than 3 cards remain after a danger play
-    if (played === 'danger' && gs.deck.length < 3) {
+    // Reshuffle discard into deck if fewer than 3 cards remain (needed for next leader draw)
+    if (gs.deck.length < 3) {
       gs.deck = shuffle([...gs.deck, ...gs.discardPile]);
       gs.discardPile = [];
     }
