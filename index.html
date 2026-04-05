@@ -950,7 +950,7 @@ function getPlayerRole(name) {
 function getDefaultScoutName(state) {
   const source = state || gs;
   if (!source || !Array.isArray(source.players)) return '';
-  return source.players.find(player => player !== source.leaderName) || source.players[0] || '';
+  return source.players.find(player => player !== source.leaderName) || '';
 }
 
 function syncLeaderFromIndex(state) {
@@ -981,7 +981,16 @@ function hydrateState(state) {
 
 function getUpcomingLeaderName(offset) {
   if (!gs || !gs.players.length) return '';
-  return gs.players[(gs.leaderIndex + offset + gs.players.length) % gs.players.length] || '';
+  return gs.players[(gs.leaderIndex + offset) % gs.players.length] || '';
+}
+
+function getRoleTierSummary() {
+  return ROLE_TIERS.map((tier, index) => {
+    const minPlayers = index === 0
+      ? MIN_PLAYERS
+      : ROLE_TIERS[index - 1].maxPlayers + 1;
+    return `${minPlayers}-${tier.maxPlayers} = ${tier.cultists}`;
+  }).join(', ');
 }
 
 function ensureEnoughCards() {
@@ -1046,7 +1055,7 @@ function renderSetup() {
       <div class="panel-note">
         ${tempPlayers.length >= MIN_PLAYERS
           ? `With <strong>${tempPlayers.length}</strong> players, use <strong>${roleConfig.cultists}</strong> cultist${roleConfig.cultists === 1 ? '' : 's'} plus <strong>1 Cult Leader</strong>.`
-          : `Role spread scales up to ${MAX_PLAYERS} players: 5-6 = 1 cultist, 7-8 = 2, 9-10 = 3, 11-12 = 4, 13-15 = 5, plus 1 Cult Leader.`}
+          : `Role spread scales up to ${MAX_PLAYERS} players: ${getRoleTierSummary()}, plus 1 Cult Leader.`}
       </div>
     </div>
     <button class="btn-primary" id="start-game-btn" ${canStart ? '' : 'disabled'}>
