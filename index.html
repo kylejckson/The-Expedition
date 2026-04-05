@@ -956,7 +956,8 @@ function getDefaultScoutName(state) {
 function syncLeaderFromIndex(state) {
   const source = state || gs;
   if (!source || !Array.isArray(source.players) || source.players.length === 0) return;
-  source.leaderIndex = Math.max(0, Math.min(Number(source.leaderIndex) || 0, source.players.length - 1));
+  const rawLeaderIndex = Number(source.leaderIndex ?? 0);
+  source.leaderIndex = Math.max(0, Math.min(rawLeaderIndex, source.players.length - 1));
   source.leaderName = source.players[source.leaderIndex] || source.players[0] || '';
   if (!source.players.includes(source.scoutName) || source.scoutName === source.leaderName) {
     source.scoutName = getDefaultScoutName(source);
@@ -973,7 +974,8 @@ function hydrateState(state) {
   hydrated.scoutCards = Array.isArray(hydrated.scoutCards) ? hydrated.scoutCards : [];
   hydrated.roundNumber = Math.max(1, Number(hydrated.roundNumber) || 1);
   if (!Number.isInteger(hydrated.leaderIndex)) {
-    hydrated.leaderIndex = Math.max(hydrated.players.indexOf(hydrated.leaderName), 0);
+    const storedLeaderIndex = hydrated.players.indexOf(hydrated.leaderName);
+    hydrated.leaderIndex = storedLeaderIndex >= 0 ? storedLeaderIndex : 0;
   }
   syncLeaderFromIndex(hydrated);
   return hydrated;
@@ -1036,6 +1038,7 @@ let tempPlayers = [];
 function renderSetup() {
   if (!tempPlayers) tempPlayers = [];
   const roleConfig = getRoleConfig(Math.max(tempPlayers.length, MIN_PLAYERS));
+  const cultLeaderSuffix = `plus <strong>1 Cult Leader</strong>.`;
   const listItems = tempPlayers.map((p, i) =>
     `<li><span>${p}</span><button class="remove-btn" data-i="${i}" aria-label="Remove ${p}">✕</button></li>`
   ).join('');
@@ -1054,8 +1057,8 @@ function renderSetup() {
       <ul class="player-list" id="player-list">${listItems}</ul>
       <div class="panel-note">
         ${tempPlayers.length >= MIN_PLAYERS
-          ? `With <strong>${tempPlayers.length}</strong> players, use <strong>${roleConfig.cultists}</strong> cultist${roleConfig.cultists === 1 ? '' : 's'} plus <strong>1 Cult Leader</strong>.`
-          : `Role spread scales up to ${MAX_PLAYERS} players: ${getRoleTierSummary()}, plus 1 Cult Leader.`}
+          ? `With <strong>${tempPlayers.length}</strong> players, use <strong>${roleConfig.cultists}</strong> cultist${roleConfig.cultists === 1 ? '' : 's'} ${cultLeaderSuffix}`
+          : `Role spread scales up to ${MAX_PLAYERS} players: ${getRoleTierSummary()}, ${cultLeaderSuffix}`}
       </div>
     </div>
     <button class="btn-primary" id="start-game-btn" ${canStart ? '' : 'disabled'}>
