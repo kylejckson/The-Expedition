@@ -310,6 +310,160 @@
     margin-bottom: 12px;
   }
 
+  .board-screen {
+    animation: fadeInUp 0.35s ease-out;
+  }
+  .board-hero {
+    background:
+      radial-gradient(circle at top, rgba(74, 144, 217, 0.22), transparent 58%),
+      linear-gradient(135deg, rgba(74, 144, 217, 0.16), rgba(39, 174, 96, 0.08));
+    border: 1px solid rgba(74, 144, 217, 0.35);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    text-align: center;
+    animation: fadeInDown 0.35s ease-out;
+  }
+  .board-round-pill {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .board-hero h2 { margin-bottom: 8px; }
+  .board-hero p { margin-bottom: 0; }
+  .status-banner {
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    font-weight: 700;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    animation: fadeInUp 0.25s ease-out;
+  }
+  .status-banner.safe {
+    background: rgba(39, 174, 96, 0.16);
+    border-color: rgba(39, 174, 96, 0.45);
+    color: #86efac;
+  }
+  .status-banner.danger {
+    background: rgba(192, 57, 43, 0.18);
+    border-color: rgba(192, 57, 43, 0.45);
+    color: #fca5a5;
+  }
+  .status-banner.neutral { color: var(--text); }
+  .turn-order-wrap {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    margin-bottom: 16px;
+  }
+  .turn-order-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .turn-order {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .turn-chip {
+    min-width: calc(50% - 4px);
+    flex: 1 1 calc(50% - 4px);
+    background: #191919;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .turn-chip.current {
+    border-color: rgba(74, 144, 217, 0.8);
+    box-shadow: 0 8px 22px rgba(74, 144, 217, 0.18);
+    transform: translateY(-2px);
+  }
+  .turn-chip.up-next {
+    border-style: dashed;
+    border-color: rgba(230, 126, 34, 0.75);
+  }
+  .turn-chip-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.82rem;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+  .turn-chip.current .turn-chip-num {
+    background: var(--accent);
+    color: #fff;
+  }
+  .turn-chip-main {
+    min-width: 0;
+    flex: 1;
+  }
+  .turn-chip-name {
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .turn-chip-meta {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+  .board-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .fact-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+  }
+  .fact-card-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .fact-card-value {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .team-summary {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .team-summary .fact-card { flex: 1; }
+  .panel-note {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
   /* ── Utilities ── */
   .hidden { display: none !important; }
   .text-center { text-align: center; }
@@ -436,6 +590,19 @@
   }
 
   .panel { animation: fadeInUp 0.3s ease-out; }
+
+  @media (max-width: 420px) {
+    .turn-chip {
+      min-width: 100%;
+      flex-basis: 100%;
+    }
+    .board-facts {
+      grid-template-columns: 1fr;
+    }
+    .team-summary {
+      flex-direction: column;
+    }
+  }
 
   /* ── Confetti particles (win screen) ── */
   .confetti-wrap {
@@ -584,6 +751,11 @@ function playSound(id) {
       case 'tap':
         playTone(880, 'sine', 0.08, 0.12, t, ctx);
         break;
+      case 'round-start':
+        playTone(392, 'triangle', 0.12, 0.12, t, ctx);
+        playTone(523.25, 'triangle', 0.16, 0.12, t + 0.08, ctx);
+        playTone(659.25, 'sine', 0.22, 0.12, t + 0.16, ctx);
+        break;
       case 'select':
         playTone(660, 'sine', 0.12, 0.15, t, ctx);
         playTone(880, 'sine', 0.1,  0.1,  t + 0.07, ctx);
@@ -592,6 +764,7 @@ function playSound(id) {
         // C-E-G ascending arpeggio
         const notes = [523.25, 659.25, 783.99];
         notes.forEach((f, i) => playTone(f, 'sine', 0.25, 0.18, t + i * 0.1, ctx));
+        playTone(1174.66, 'triangle', 0.18, 0.1, t + 0.22, ctx);
         break;
       }
       case 'danger': {
@@ -599,6 +772,7 @@ function playSound(id) {
         playTone(220, 'sawtooth', 0.25, 0.12, t, ctx);
         playTone(185, 'sawtooth', 0.3,  0.12, t + 0.1, ctx);
         playTone(155, 'square',   0.35, 0.1,  t + 0.22, ctx);
+        playTone(110, 'triangle', 0.45, 0.08, t + 0.28, ctx);
         break;
       }
       case 'win-survivors': {
@@ -684,6 +858,9 @@ const DEFAULT_STATE = {
   activePlayer: '',
   // internal phase helpers
   revealIndex: 0,        // which player is currently revealing role
+  leaderIndex: 0,
+  roundNumber: 1,
+  lastPlayedCard: '',
   leaderName: '',
   scoutName: '',
   leaderDrawCards: [],   // 3 cards drawn by leader
@@ -697,7 +874,7 @@ function saveState() {
 function loadState() {
   const raw = localStorage.getItem('expeditionState');
   if (raw) {
-    try { gs = JSON.parse(raw); return true; } catch(e) { console.error('Failed to parse saved state:', e); }
+    try { gs = hydrateState(JSON.parse(raw)); return true; } catch(e) { console.error('Failed to parse saved state:', e); }
   }
   return false;
 }
@@ -733,14 +910,18 @@ function makeDeck() {
 function cardEmoji(type) { return type === 'safe' ? '🧭' : '🐺'; }
 function cardLabel(type) { return type === 'safe' ? 'Safe 🧭' : 'Danger 🐺'; }
 
-// Player counts at which each role tier applies
-const MAX_PLAYERS_SMALL_GROUP  = 6; // 5-6 players: 1 cultist
-const MAX_PLAYERS_MEDIUM_GROUP = 8; // 7-8 players: 2 cultists
+const MIN_PLAYERS = 5;
+const MAX_PLAYERS = 15;
+const ROLE_TIERS = [
+  { maxPlayers: 6,  cultists: 1, seesEachOther: true  },
+  { maxPlayers: 8,  cultists: 2, seesEachOther: false },
+  { maxPlayers: 10, cultists: 3, seesEachOther: false },
+  { maxPlayers: 12, cultists: 4, seesEachOther: false },
+  { maxPlayers: 15, cultists: 5, seesEachOther: false },
+];
 
 function getRoleConfig(count) {
-  if (count <= MAX_PLAYERS_SMALL_GROUP)  return { cultists: 1, seesEachOther: true };
-  if (count <= MAX_PLAYERS_MEDIUM_GROUP) return { cultists: 2, seesEachOther: false };
-  return { cultists: 3, seesEachOther: false };
+  return ROLE_TIERS.find(tier => count <= tier.maxPlayers) || ROLE_TIERS[ROLE_TIERS.length - 1];
 }
 
 function assignRoles(players) {
@@ -766,6 +947,43 @@ function getPlayerRole(name) {
   return idx >= 0 ? gs.roles[idx] : null;
 }
 
+function getDefaultScoutName(state) {
+  const source = state || gs;
+  if (!source || !Array.isArray(source.players)) return '';
+  return source.players.find(player => player !== source.leaderName) || source.players[0] || '';
+}
+
+function syncLeaderFromIndex(state) {
+  const source = state || gs;
+  if (!source || !Array.isArray(source.players) || source.players.length === 0) return;
+  source.leaderIndex = Math.max(0, Math.min(Number(source.leaderIndex) || 0, source.players.length - 1));
+  source.leaderName = source.players[source.leaderIndex] || source.players[0] || '';
+  if (!source.players.includes(source.scoutName) || source.scoutName === source.leaderName) {
+    source.scoutName = getDefaultScoutName(source);
+  }
+}
+
+function hydrateState(state) {
+  const hydrated = { ...DEFAULT_STATE, ...state };
+  hydrated.players = Array.isArray(hydrated.players) ? hydrated.players : [];
+  hydrated.roles = Array.isArray(hydrated.roles) ? hydrated.roles : [];
+  hydrated.deck = Array.isArray(hydrated.deck) ? hydrated.deck : [];
+  hydrated.discardPile = Array.isArray(hydrated.discardPile) ? hydrated.discardPile : [];
+  hydrated.leaderDrawCards = Array.isArray(hydrated.leaderDrawCards) ? hydrated.leaderDrawCards : [];
+  hydrated.scoutCards = Array.isArray(hydrated.scoutCards) ? hydrated.scoutCards : [];
+  hydrated.roundNumber = Math.max(1, Number(hydrated.roundNumber) || 1);
+  if (!Number.isInteger(hydrated.leaderIndex)) {
+    hydrated.leaderIndex = Math.max(hydrated.players.indexOf(hydrated.leaderName), 0);
+  }
+  syncLeaderFromIndex(hydrated);
+  return hydrated;
+}
+
+function getUpcomingLeaderName(offset) {
+  if (!gs || !gs.players.length) return '';
+  return gs.players[(gs.leaderIndex + offset + gs.players.length) % gs.players.length] || '';
+}
+
 function ensureEnoughCards() {
   if (gs.deck.length < 3) {
     gs.deck = shuffle([...gs.deck, ...gs.discardPile]);
@@ -788,6 +1006,7 @@ function render() {
     case 'setup':          app.innerHTML = renderSetup();          bindSetup();          break;
     case 'lock-reveal':    app.innerHTML = renderLockReveal();     bindLockReveal();     break;
     case 'role-reveal':    app.innerHTML = renderRoleReveal();     bindRoleReveal();     break;
+    case 'board-overview': app.innerHTML = renderBoardOverview();  bindBoardOverview();  break;
     case 'expedition':     app.innerHTML = renderExpedition();     bindExpedition();     break;
     case 'lock-leader':    app.innerHTML = renderLockLeader();     bindLockLeader();     break;
     case 'leader-draw':    app.innerHTML = renderLeaderDraw();     bindLeaderDraw();     break;
@@ -807,11 +1026,12 @@ let tempPlayers = [];
 
 function renderSetup() {
   if (!tempPlayers) tempPlayers = [];
+  const roleConfig = getRoleConfig(Math.max(tempPlayers.length, MIN_PLAYERS));
   const listItems = tempPlayers.map((p, i) =>
     `<li><span>${p}</span><button class="remove-btn" data-i="${i}" aria-label="Remove ${p}">✕</button></li>`
   ).join('');
-  const canStart = tempPlayers.length >= 5;
-  const tooMany  = tempPlayers.length >= 10;
+  const canStart = tempPlayers.length >= MIN_PLAYERS;
+  const tooMany  = tempPlayers.length >= MAX_PLAYERS;
   return `
     <div class="game-header">
       <h1>🧭 The Expedition</h1>
@@ -819,13 +1039,18 @@ function renderSetup() {
     </div>
     <div class="panel">
       <h2>👥 Add Players</h2>
-      <p>${tempPlayers.length}/10 players (min 5)</p>
+      <p>${tempPlayers.length}/${MAX_PLAYERS} players (min ${MIN_PLAYERS})</p>
       <input type="text" id="player-input" placeholder="Player name…" maxlength="20" ${tooMany ? 'disabled' : ''} />
       <button class="btn-ghost" id="add-player-btn" ${tooMany ? 'disabled' : ''}>+ Add Player</button>
       <ul class="player-list" id="player-list">${listItems}</ul>
+      <div class="panel-note">
+        ${tempPlayers.length >= MIN_PLAYERS
+          ? `With <strong>${tempPlayers.length}</strong> players, use <strong>${roleConfig.cultists}</strong> cultist${roleConfig.cultists === 1 ? '' : 's'} plus <strong>1 Cult Leader</strong>.`
+          : `Role spread scales up to ${MAX_PLAYERS} players: 5-6 = 1 cultist, 7-8 = 2, 9-10 = 3, 11-12 = 4, 13-15 = 5, plus 1 Cult Leader.`}
+      </div>
     </div>
     <button class="btn-primary" id="start-game-btn" ${canStart ? '' : 'disabled'}>
-      ${canStart ? '🚀 Start Game' : `Need ${5 - tempPlayers.length} more player${5 - tempPlayers.length !== 1 ? 's' : ''}`}
+      ${canStart ? '🚀 Start Game' : `Need ${MIN_PLAYERS - tempPlayers.length} more player${MIN_PLAYERS - tempPlayers.length !== 1 ? 's' : ''}`}
     </button>
   `;
 }
@@ -839,7 +1064,7 @@ function bindSetup() {
     const name = input.value.trim();
     if (!name) return;
     if (tempPlayers.includes(name)) { alert('A player with that name already exists.'); return; }
-    if (tempPlayers.length >= 10) return;
+    if (tempPlayers.length >= MAX_PLAYERS) return;
     vibrate([10]);
     playSound('tap');
     tempPlayers.push(name);
@@ -862,10 +1087,10 @@ function bindSetup() {
   });
 
   startBtn.addEventListener('click', () => {
-    if (tempPlayers.length < 5) return;
+    if (tempPlayers.length < MIN_PLAYERS) return;
     vibrate([20, 30, 20]);
     playSound('reveal');
-    gs = { ...DEFAULT_STATE };
+    gs = hydrateState({ ...DEFAULT_STATE });
     gs.players = [...tempPlayers];
     gs.roles = assignRoles(gs.players);
     gs.deck = makeDeck();
@@ -875,8 +1100,10 @@ function bindSetup() {
     gs.currentPhase = 'lock-reveal';
     gs.revealIndex = 0;
     gs.activePlayer = gs.players[0];
-    gs.leaderName = '';
-    gs.scoutName = '';
+    gs.leaderIndex = 0;
+    gs.roundNumber = 1;
+    gs.lastPlayedCard = '';
+    syncLeaderFromIndex(gs);
     gs.leaderDrawCards = [];
     gs.scoutCards = [];
     saveState();
@@ -1007,8 +1234,12 @@ function bindRoleReveal() {
     playSound('lock');
     const nextIndex = gs.revealIndex + 1;
     if (nextIndex >= gs.players.length) {
-      // All roles revealed — go to expedition
-      gs.currentPhase = 'expedition';
+      // All roles revealed — show the shared board before round one
+      gs.leaderIndex = 0;
+      gs.roundNumber = 1;
+      gs.lastPlayedCard = '';
+      syncLeaderFromIndex(gs);
+      gs.currentPhase = 'board-overview';
       gs.revealIndex = 0;
     } else {
       gs.revealIndex = nextIndex;
@@ -1030,19 +1261,8 @@ function renderPips(filled, total, type) {
   ).join('');
 }
 
-function renderExpedition() {
-  const playerOptions = gs.players.map(p =>
-    `<option value="${esc(p)}" ${p === gs.leaderName ? 'selected' : ''}>${esc(p)}</option>`
-  ).join('');
-
-  const scoutOptions = gs.players.map(p =>
-    `<option value="${esc(p)}" ${p === gs.scoutName ? 'selected' : ''}>${esc(p)}</option>`
-  ).join('');
-
+function renderScoreboard() {
   return `
-    <div class="game-header">
-      <h1>🧭 The Expedition</h1>
-    </div>
     <div class="scoreboard">
       <div class="score-box safe">
         <div class="score-label">Safe Paths</div>
@@ -1057,36 +1277,124 @@ function renderExpedition() {
         <div class="pips">${renderPips(gs.dangerCardsPlayed, 6, 'danger')}</div>
       </div>
     </div>
+  `;
+}
+
+function renderTurnOrder() {
+  return `
+    <div class="turn-order-wrap">
+      <div class="turn-order-label">Leader order</div>
+      <div class="turn-order">
+        ${gs.players.map((player, index) => {
+          const isCurrent = index === gs.leaderIndex;
+          const isNext = index === ((gs.leaderIndex + 1) % gs.players.length);
+          return `
+            <div class="turn-chip ${isCurrent ? 'current' : ''} ${!isCurrent && isNext ? 'up-next' : ''}">
+              <div class="turn-chip-num">${index + 1}</div>
+              <div class="turn-chip-main">
+                <div class="turn-chip-name">${esc(player)}</div>
+                <div class="turn-chip-meta">${isCurrent ? 'Now leading' : isNext ? 'On deck' : 'Waiting'}</div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderBoardBanner() {
+  if (gs.lastPlayedCard === 'safe') {
+    return `<div class="status-banner safe">🧭 Last round found a safe path. Survivors are closing in on victory.</div>`;
+  }
+  if (gs.lastPlayedCard === 'danger') {
+    return `<div class="status-banner danger">🐺 Last round revealed danger. The cult is pressuring the expedition.</div>`;
+  }
+  return `<div class="status-banner neutral">📍 No paths have been played yet. Use this as the shared table board before the next private turn.</div>`;
+}
+
+function renderBoardOverview() {
+  syncLeaderFromIndex(gs);
+  return `
+    <div class="game-header">
+      <h1>🧭 Expedition Board</h1>
+      <p class="subtitle">Round ${gs.roundNumber} begins with a shared board check.</p>
+    </div>
+    <div class="board-screen">
+      ${renderScoreboard()}
+      <div class="deck-info">📦 Cards in deck: ${gs.deck.length} &nbsp;|&nbsp; 🗑️ Discard: ${gs.discardPile.length}</div>
+      <div class="board-hero">
+        <div class="board-round-pill">Round ${gs.roundNumber}</div>
+        <h2>Next Leader: ${esc(gs.leaderName)}</h2>
+        <p>Show everyone the board, talk through the table state, then continue to ${esc(gs.leaderName)}'s private turn.</p>
+      </div>
+      ${renderBoardBanner()}
+      ${renderTurnOrder()}
+      <div class="board-facts">
+        <div class="fact-card">
+          <div class="fact-card-label">Leading now</div>
+          <div class="fact-card-value">${esc(gs.leaderName)}</div>
+        </div>
+        <div class="fact-card">
+          <div class="fact-card-label">On deck</div>
+          <div class="fact-card-value">${esc(getUpcomingLeaderName(1))}</div>
+        </div>
+      </div>
+      <button class="btn-primary" id="continue-board-btn">➡️ Continue to ${esc(gs.leaderName)}'s team vote</button>
+    </div>
+  `;
+}
+
+function bindBoardOverview() {
+  document.getElementById('continue-board-btn').addEventListener('click', () => {
+    vibrate([10, 20, 10]);
+    playSound('round-start');
+    gs.currentPhase = 'expedition';
+    saveState();
+    render();
+  });
+}
+
+function renderExpedition() {
+  syncLeaderFromIndex(gs);
+  const scoutOptions = gs.players.filter(p => p !== gs.leaderName).map(p =>
+    `<option value="${esc(p)}" ${p === gs.scoutName ? 'selected' : ''}>${esc(p)}</option>`
+  ).join('');
+
+  return `
+    <div class="game-header">
+      <h1>🧭 The Expedition</h1>
+      <p class="subtitle">Round ${gs.roundNumber}: ${esc(gs.leaderName)} leads the vote.</p>
+    </div>
+    ${renderScoreboard()}
     <div class="deck-info">📦 Cards in deck: ${gs.deck.length} &nbsp;|&nbsp; 🗑️ Discard: ${gs.discardPile.length}</div>
     <div class="panel">
-      <h2>⚙️ Select Expedition Team</h2>
-      <label for="leader-select">Expedition Leader</label>
-      <select id="leader-select">${playerOptions}</select>
-      <label for="scout-select">Scout</label>
+      <h2>⚙️ Vote the Scout</h2>
+      <div class="team-summary">
+        <div class="fact-card">
+          <div class="fact-card-label">Leader</div>
+          <div class="fact-card-value">${esc(gs.leaderName)}</div>
+        </div>
+        <div class="fact-card">
+          <div class="fact-card-label">Round</div>
+          <div class="fact-card-value">${gs.roundNumber}</div>
+        </div>
+      </div>
+      <label for="scout-select">Scout nominee</label>
       <select id="scout-select">${scoutOptions}</select>
-      <p style="font-size:0.85rem">The Leader and Scout must be different people. Discuss and vote in person, then proceed.</p>
-      <button class="btn-primary" id="proceed-btn">✅ Voted in Person. Proceed to Path Selection</button>
+      <p style="font-size:0.85rem">${esc(gs.leaderName)} cannot also be the Scout. Discuss and vote in person, then proceed to the private draw.</p>
+      <button class="btn-primary" id="proceed-btn">✅ Team Agreed. Continue to ${esc(gs.leaderName)}</button>
     </div>
   `;
 }
 
 function bindExpedition() {
-  const leaderSel = document.getElementById('leader-select');
   const scoutSel  = document.getElementById('scout-select');
   const proceedBtn = document.getElementById('proceed-btn');
 
-  // initialize defaults if not set
-  if (!gs.leaderName) gs.leaderName = gs.players[0];
-  if (!gs.scoutName)  gs.scoutName  = gs.players[1] || gs.players[0];
-
-  leaderSel.value = gs.leaderName;
+  syncLeaderFromIndex(gs);
   scoutSel.value  = gs.scoutName;
 
-  leaderSel.addEventListener('change', () => {
-    vibrate([8]);
-    gs.leaderName = leaderSel.value;
-    saveState();
-  });
   scoutSel.addEventListener('change', () => {
     vibrate([8]);
     gs.scoutName = scoutSel.value;
@@ -1094,7 +1402,6 @@ function bindExpedition() {
   });
 
   proceedBtn.addEventListener('click', () => {
-    gs.leaderName = leaderSel.value;
     gs.scoutName  = scoutSel.value;
     if (gs.leaderName === gs.scoutName) {
       vibrate([50, 30, 50]);
@@ -1209,6 +1516,7 @@ function bindScoutPlay() {
     const discarded = gs.scoutCards[1 - selectedIndex];
 
     gs.discardPile.push(discarded);
+    gs.lastPlayedCard = played;
 
     if (played === 'safe') {
       gs.safeCardsPlayed++;
@@ -1236,7 +1544,10 @@ function bindScoutPlay() {
     } else if (gs.dangerCardsPlayed >= 6) {
       gs.currentPhase = 'win-cultists';
     } else {
-      gs.currentPhase = 'expedition';
+      gs.leaderIndex = (gs.leaderIndex + 1) % gs.players.length;
+      gs.roundNumber++;
+      syncLeaderFromIndex(gs);
+      gs.currentPhase = 'board-overview';
     }
 
     saveState();
