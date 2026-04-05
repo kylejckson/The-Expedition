@@ -1038,7 +1038,7 @@ let tempPlayers = [];
 function renderSetup() {
   if (!tempPlayers) tempPlayers = [];
   const roleConfig = getRoleConfig(Math.max(tempPlayers.length, MIN_PLAYERS));
-  const cultLeaderSuffix = `plus <strong>a Cult Leader</strong>.`;
+  const cultLeaderText = `plus <strong>a Cult Leader</strong>.`;
   const listItems = tempPlayers.map((p, i) =>
     `<li><span>${p}</span><button class="remove-btn" data-i="${i}" aria-label="Remove ${p}">✕</button></li>`
   ).join('');
@@ -1057,8 +1057,8 @@ function renderSetup() {
       <ul class="player-list" id="player-list">${listItems}</ul>
       <div class="panel-note">
         ${tempPlayers.length >= MIN_PLAYERS
-          ? `With <strong>${tempPlayers.length}</strong> players, use <strong>${roleConfig.cultists}</strong> cultist${roleConfig.cultists === 1 ? '' : 's'} ${cultLeaderSuffix}`
-          : `Role spread scales up to ${MAX_PLAYERS} players: ${getRoleTierSummary()}, ${cultLeaderSuffix}`}
+          ? `With <strong>${tempPlayers.length}</strong> players, use <strong>${roleConfig.cultists}</strong> cultist${roleConfig.cultists === 1 ? '' : 's'} ${cultLeaderText}`
+          : `Role spread scales up to ${MAX_PLAYERS} players: ${getRoleTierSummary()}, ${cultLeaderText}`}
       </div>
     </div>
     <button class="btn-primary" id="start-game-btn" ${canStart ? '' : 'disabled'}>
@@ -1322,7 +1322,7 @@ function renderBoardBanner() {
   if (gs.lastPlayedCard === 'danger') {
     return `<div class="status-banner danger">🐺 Last round revealed danger. The cult is pressuring the expedition.</div>`;
   }
-  return `<div class="status-banner neutral">📍 No paths have been played yet. Use this as the shared table board before the next private turn.</div>`;
+  return `<div class="status-banner neutral">📍 No paths have been played yet. This shared board shows the current game state before the leader's turn.</div>`;
 }
 
 function renderBoardOverview() {
